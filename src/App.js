@@ -4,6 +4,21 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import './App.css';
 
+// Useful currency symbols map (add more as needed)
+const currency_symbols = {
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  INR: '₹',
+  JPY: '¥',
+  AUD: 'A$',
+  CAD: 'C$',
+  CHF: 'CHF',
+  CNY: '¥',
+  RUB: '₽',
+  // Add more as needed
+};
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function App() {
@@ -107,12 +122,16 @@ function App() {
     }
   }, [country, countries]);
 
-  // Update currency symbol when result is updated
+  // Update currency symbol when currency changes or result is updated
   useEffect(() => {
     if (result && result.currency_symbol) {
       setCurrencySymbol(result.currency_symbol);
+    } else if (currency && currency_symbols[currency]) {
+      setCurrencySymbol(currency_symbols[currency]);
+    } else {
+      setCurrencySymbol('$');
     }
-  }, [result]);
+  }, [result, currency]);
 
   const totalExpenses = (
     parseFloat(physiologicalExpenses || 0) +
